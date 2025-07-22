@@ -1,7 +1,12 @@
 using BlazorDemoRMWASM.Client.Pages;
 using BlazorDemoRMWASM.Components;
+using BlazorDemoRMWASM.DAL;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<DataEntities>(options =>
+    options.UseSqlServer(connectionString));
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -28,6 +33,6 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(BlazorDemoRMWASM.Client._Imports).Assembly);
+    .AddAdditionalAssemblies(typeof(BlazorDemoRMWASM.Components._Imports).Assembly);
 
 app.Run();
