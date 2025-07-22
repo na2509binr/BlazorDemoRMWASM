@@ -1,0 +1,30 @@
+﻿@using BlazorDemoRMWASM.Components.Layout
+@inject NavigationManager NavManager
+
+<Router AppAssembly="@typeof(Program).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@GetLayout()" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(ClientLayout)">
+            <h3 class="text-red-500">404 - Page not found</h3>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+@code {
+    private Type GetLayout()
+    {
+        var uri = NavManager.Uri;
+        var path = new Uri(uri).AbsolutePath.ToLowerInvariant();
+
+        Console.WriteLine($"[DEBUG] URL Path = {path}");
+
+        if (path.StartsWith("/admin"))
+        {
+            return typeof(MainLayout);
+        }
+
+        return typeof(ClientLayout);
+    }
+}
